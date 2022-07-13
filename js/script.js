@@ -44,14 +44,21 @@ function picturesListener(){
 }
 picturesListener();
 
-const cartNb = document.querySelector('.cart-nb');
 const addCta = document.querySelector('.add-cta');
+function addCart(){
+    const cartNb = document.querySelector('.cart-nb');
+    const inputNb = document.querySelector('.add-qty');
+    let Qty = parseInt(inputNb.value);
 
-function addcart(sens){
-    let Qty = (sens == 1) ? parseInt(cartNb.innerText) + 1 : parseInt(cartNb.innerText) - 1;
-    cartNb.innerTex = Qty;
+    if( Qty > 99 ){
+        cartNb.innerText = "99+";
+    }
+    else cartNb.innerText =  parseInt(cartNb.innerText) + Qty;
+    disabledCart();
 }
-
-addCta.addEventListener('click', function(event) { 
-    addcart(1);
- });
+function disabledCart(){
+    addCta.setAttribute('disabled','disabled');
+    addCta.innerText = 'Déjà au panier';
+    addCta.removeEventListener('click', addCart);
+}
+addCta.addEventListener('click', addCart);
