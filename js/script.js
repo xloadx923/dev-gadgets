@@ -13,7 +13,7 @@ function picturesListener(cibleImg, classImage, imgtabPrincipal, buttons, bool){
     }
     let final = slide.length;
 
-    onWindowResize(slide,imgPrincipal,imgForPrincipal);
+    //onWindowResize(slide,imgPrincipal,imgForPrincipal);
 
     if(!bool){
         img.forEach(picture => {
