@@ -285,10 +285,10 @@ body {
     cursor: pointer;
 }
 
-.pictures-prev {
+.pictures-prev, .similar-prev{
     left: 1rem;
 }
-.pictures-next {
+.pictures-next, .similar-next{
     right: 1rem;
 }
 
@@ -307,6 +307,9 @@ body {
     .pictures-img {
         width: 100%;
         aspect-ratio: 1/1;
+    }
+    .similar-buttons{
+        display: none;
     }
 }
 
@@ -384,6 +387,8 @@ body {
     .similar-lst {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
+        width: 100%;
+        overflow: none;
     }
     .similar-lnk {
         position: relative;
@@ -557,8 +562,17 @@ body {
 }
 
 .similar-buttons{
-    position: absolute;
+    position: relative;
+    z-index: 10;
     width: 100%;
-    margin-top: -4rem;
-
+    height: 25vh;
+    margin-top: -14rem;
+    display: flex;
+    justify-content: space-around;
+}
+.similar-buttons .similar-handler{
+    font-size: 2.5rem;
+}
+.similar-prev.active, .similar-next.active{
+    visibility: hidden;
 }

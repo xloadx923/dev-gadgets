@@ -1,10 +1,16 @@
-function picturesListener(cibleImg, classImage, imgtabPrincipal, buttons){
+function picturesListener(cibleImg, classImage, imgtabPrincipal, buttons, bool){
+
     let i = 0, slide = [];
-    const imgPrincipal = document.querySelector(classImage);
-    const imgForPrincipal = imgtabPrincipal;
-    const img = document.querySelectorAll(cibleImg);
-    img.forEach(picture => { slide.push(picture.src) })
-    const final = slide.length;
+    let imgPrincipal = document.querySelector(classImage);
+    let imgForPrincipal = imgtabPrincipal;
+    let img = document.querySelectorAll(cibleImg);
+    if(!bool) img.forEach(picture => { slide.push(picture.src) });
+    else{
+        img.forEach(picture => {
+            slide.push([picture.src, picture.parentElement.children[1].innerText]);
+        });
+    }
+    let final = slide.length;
 
     img.forEach(picture => {
         picture.addEventListener('mouseover', function(event){
@@ -20,25 +26,39 @@ function picturesListener(cibleImg, classImage, imgtabPrincipal, buttons){
         imgPrincipal.src = imgForPrincipal[1];
         slide.push(imgForPrincipal[1]);
     }
-    console.log(slide.length)
+
     document.querySelector(buttons[0]).addEventListener('click', function(e) {
         if(i > 0){
             i--;
-            imgPrincipal.src = slide[i];
+            imgPrincipal.src = slide[i][0];
+            document.querySelector(buttons[1]).classList.remove('active');
+            if(bool) imgPrincipal.parentElement.children[1].innerText = slide[i][1];
         }
         else if(i == 0){
-            i = final-1;
-            imgPrincipal.src = slide[i];
+            if(!bool){
+                i = final-1;
+                imgPrincipal.src = slide[i][0];
+            }
+            else{
+                this.classList.add('active');
+            }
         }
     });
     document.querySelector(buttons[1]).addEventListener('click', function(e) {
         if(i < final-1){
             i++;
-            imgPrincipal.src = slide[i];
+            imgPrincipal.src = slide[i][0];
+            document.querySelector(buttons[0]).classList.remove('active');
+            if(bool) imgPrincipal.parentElement.children[1].innerText = slide[i][1];
         }
         else if(i == final-1){
-            i = 0;
-            imgPrincipal.src = slide[i];
+            if(!bool){
+                i = 0;
+                imgPrincipal[0].src = slide[i][0];
+            }
+            else{
+                this.classList.add('active');
+            }
         }
     });
 }
@@ -68,7 +88,6 @@ function persistanceProducts(){
 
     if(localStorage.getItem('product-advantages') === null) localStorage.setItem('product-advantages','[]');
     else if( localStorage.getItem('product-advantages') !== null && JSON.parse(localStorage.getItem('product-advantages')).length == 2){
-        console.log(typeof JSON.parse(localStorage.getItem('product-advantages'))[0])
         productAdvantages.previousElementSibling.classList.add( JSON.parse(localStorage.getItem('product-advantages'))[0] );
         productAdvantages.classList.add( JSON.parse(localStorage.getItem('product-advantages'))[1] );
     }
@@ -94,17 +113,7 @@ function persistanceProducts(){
     });
 }
 
-picturesListener('.thumbs li img', '.pictures-img',["img/canard-jaune-1-s.png", "img/canard-jaune-1-l.png"], ['.pictures-prev', '.pictures-next']);
+picturesListener('.thumbs li img', '.pictures-img',["img/canard-jaune-1-s.png", "img/canard-jaune-1-l.png"], ['.pictures-prev', '.pictures-next'], false);
+picturesListener('.similar-lst li a img', '.similar-img',["img/canard-dragon.png"], ['.similar-prev', '.similar-next'], true);
 addCta.addEventListener('click', addCart);
 persistanceProducts();
-
-const similarPrev = document.querySelector('.similar-buttons .pictures-prev');
-const similarNext = document.querySelector('.similar-buttons .pictures-next');
-
-similarPrev.addEventListener('click', function(event){
-
-});
-
-similarNext.addEventListener('click', function(event){
-
-});
