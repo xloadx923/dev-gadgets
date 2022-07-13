@@ -1,3 +1,4 @@
+// Function for slide and carousel : bool == true for carousel / false for slide
 function picturesListener(cibleImg, classImage, imgtabPrincipal, buttons, bool){
 
     let i = 0, slide = [];
@@ -12,12 +13,65 @@ function picturesListener(cibleImg, classImage, imgtabPrincipal, buttons, bool){
     }
     let final = slide.length;
 
-    img.forEach(picture => {
-        picture.addEventListener('mouseover', function(event){
-            imgPrincipal.src = this.src;
-        });
-    });
+    onWindowResize(slide,imgPrincipal,imgForPrincipal);
 
+    if(!bool){
+        img.forEach(picture => {
+            picture.addEventListener('mouseover', function(event){
+                imgPrincipal.src = this.src.replace(/s.png/g,'l.png');
+            });
+        });
+        // Management of the page resizing
+        window.onresize = function(){
+            onWindowResize(slide,imgPrincipal,imgForPrincipal);
+        }
+    }
+    // Listener Previous button
+    document.querySelector(buttons[0]).addEventListener('click', function(e) {
+        if(i > 0){
+            i--;
+            if(bool){
+                imgPrincipal.src = slide[i][0];
+                imgPrincipal.parentElement.children[1].innerText = slide[i][1];
+            }
+            else imgPrincipal.src = slide[i];
+            document.querySelector(buttons[1]).classList.remove('active');
+        }
+        else if(i == 0){
+            if(bool){
+                imgPrincipal.src = slide[i][0];
+                this.classList.add('active');
+            }
+            else{
+                i = final-1;
+                imgPrincipal.src = slide[i];
+            }
+        }
+    });
+    // Listener Next button
+    document.querySelector(buttons[1]).addEventListener('click', function(e) {
+        if(i < final-1){
+            i++;
+            document.querySelector(buttons[0]).classList.remove('active');
+            if(bool){
+                imgPrincipal.src = slide[i][0];
+                imgPrincipal.parentElement.children[1].innerText = slide[i][1];
+            }
+            else  imgPrincipal.src = slide[i];
+        }
+        else if(i == final-1){
+            if(bool){
+                this.classList.add('active');
+            }
+            else{
+                i = 0;
+                imgPrincipal.src = slide[i];
+            }
+        }
+    });
+}
+
+function onWindowResize(slide,imgPrincipal,imgForPrincipal){
     if(window.innerWidth < 768){
         imgPrincipal.src = imgForPrincipal[0];
         slide.push(imgForPrincipal[0]);
@@ -26,43 +80,8 @@ function picturesListener(cibleImg, classImage, imgtabPrincipal, buttons, bool){
         imgPrincipal.src = imgForPrincipal[1];
         slide.push(imgForPrincipal[1]);
     }
-
-    document.querySelector(buttons[0]).addEventListener('click', function(e) {
-        if(i > 0){
-            i--;
-            imgPrincipal.src = slide[i][0];
-            document.querySelector(buttons[1]).classList.remove('active');
-            if(bool) imgPrincipal.parentElement.children[1].innerText = slide[i][1];
-        }
-        else if(i == 0){
-            if(!bool){
-                i = final-1;
-                imgPrincipal.src = slide[i][0];
-            }
-            else{
-                this.classList.add('active');
-            }
-        }
-    });
-    document.querySelector(buttons[1]).addEventListener('click', function(e) {
-        if(i < final-1){
-            i++;
-            imgPrincipal.src = slide[i][0];
-            document.querySelector(buttons[0]).classList.remove('active');
-            if(bool) imgPrincipal.parentElement.children[1].innerText = slide[i][1];
-        }
-        else if(i == final-1){
-            if(!bool){
-                i = 0;
-                imgPrincipal[0].src = slide[i][0];
-            }
-            else{
-                this.classList.add('active');
-            }
-        }
-    });
 }
-
+// Add to cart and refresh in header
 const addCta = document.querySelector('.add-cta');
 function addCart(){
     const cartNb = document.querySelector('.cart-nb');
@@ -75,12 +94,14 @@ function addCart(){
     else cartNb.innerText =  parseInt(cartNb.innerText) + Qty;
     disabledCart();
 }
+// Disabling and renaming the cart button + removeListener
 function disabledCart(){
     addCta.setAttribute('disabled','disabled');
     addCta.innerText = 'Déjà au panier';
     addCta.removeEventListener('click', addCart);
 }
 
+// Persistence of accordions
 function persistanceProducts(){
     const buttonsH2 = document.querySelectorAll('.product-acrd-lnk');
     const productAdvantages     = document.querySelector('.product-advantages');
@@ -96,7 +117,7 @@ function persistanceProducts(){
         productCaractristic.previousElementSibling.classList.add( JSON.parse(localStorage.getItem('product-car'))[0] );
         productCaractristic.classList.add( JSON.parse(localStorage.getItem('product-car'))[1] );
     }
-
+    // Listener on 'Avantages' and 'Caractéristiques'
     buttonsH2.forEach(h2 => {
         h2.addEventListener('click', function(event){
             if(this.nextElementSibling.classList.contains('active')){
@@ -113,7 +134,11 @@ function persistanceProducts(){
     });
 }
 
+// Call 1st Listener at the top of the page with its own parameters for the infinite slide
 picturesListener('.thumbs li img', '.pictures-img',["img/canard-jaune-1-s.png", "img/canard-jaune-1-l.png"], ['.pictures-prev', '.pictures-next'], false);
+// Call 1st Listener at the bottom of the page with its own parameters for the carousel
 picturesListener('.similar-lst li a img', '.similar-img',["img/canard-dragon.png"], ['.similar-prev', '.similar-next'], true);
+// Add to cart
 addCta.addEventListener('click', addCart);
+// Persistence of accordions
 persistanceProducts();
