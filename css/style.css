@@ -270,6 +270,7 @@ body {
     position: relative;
     display: flex;
     flex-direction: column;
+    padding: 0 4.7rem;
 }
 
 .pictures-handler {
@@ -296,6 +297,7 @@ body {
 }
 
 @media screen and (min-width: 768px) {
+    
     .pictures {
         max-width: 600px;
     }
@@ -336,8 +338,11 @@ body {
     overflow: hidden;
 }
 .similar-lst {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-direction: row;
+    width: 254px;
+    overflow: hidden;
+    margin: 0 auto;
 }
 .similar-lnk {
     position: relative;
@@ -353,7 +358,7 @@ body {
     transition: background var(--transition-duration) var(--transition-function);
 }
 .similar-img {
-    width:100%;
+    width: 226px;
 }
 .similar-ttl {
     font-size: 1.5rem;
@@ -376,6 +381,46 @@ body {
 }
 
 @media screen and (min-width: 768px) {
+    .similar-lst {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+    }
+    .similar-lnk {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem;
+        color: #000;
+        background-color: #fff;
+        height: 100%;
+        transition: background var(--transition-duration) var(--transition-function);
+    }
+    .similar-img {
+        width:100%;
+    }
+    .similar-ttl {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+    .similar-price {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 3rem;
+        padding: 0 1rem;
+        border-radius: 1.5rem;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white;
+        background-color: var(--primary-color);
+    }
+    
     .similar-lnk:hover {
         background-color: #dddddd;
     }
@@ -438,6 +483,7 @@ body {
 
 .page-section {
     margin-bottom: 1rem;
+    height: auto;
 }
 
 @media screen and (max-width: 767px) {
@@ -489,8 +535,30 @@ body {
 }
 .legal-itm:not(:first-child)::before {
     content: "|";
-    padding: 0 .5rem; 
+    padding: 0 .5rem;
 }
 .legal-lnk {
     color: #fff;
+}
+
+.product-advantages.active, .product-car.active{
+    display: none;
+}
+
+.thumbs li{
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: .3s ease-in-out;
+    transition: .3s ease-in-out;
+}
+.thumbs li:hover img {
+    -webkit-transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+.similar-buttons{
+    position: absolute;
+    width: 100%;
+    margin-top: -4rem;
+
 }
